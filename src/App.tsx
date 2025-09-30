@@ -3,11 +3,14 @@ import { useState } from "react";
 import "./App.css";
 import InputForm from "./components/InputForm";
 import TodoList from "./components/TodoList/";
-import type { Todo, Tag } from "./types/todo";
+import type { Todo, Tag, Priority } from "./types/todo";
 
 function App() {
 	const [tasks, setTasks] = useState<Todo[]>([]);
 	const [filterTag, setFilterTag] = useState<Tag | "すべて">("すべて");
+	const [filterPriority, setFilterPriority] = useState<Priority | "すべて">(
+		"すべて"
+	);
 	const addTask = (newTask: Todo) => {
 		setTasks([...tasks, newTask]);
 	};
@@ -30,10 +33,12 @@ function App() {
 		});
 	};
 
-	const filteredTasks =
-		filterTag === "すべて"
-			? tasks
-			: tasks.filter((task) => task.tag === filterTag);
+	const filteredTasks = tasks.filter((task) => {
+		const tagMatch = filterTag === "すべて" || task.tag === filterTag;
+		const priorityMatch =
+			filterPriority === "すべて" || task.priority === filterPriority;
+		return tagMatch && priorityMatch;
+	});
 
 	return (
 		<div className="app">
@@ -56,6 +61,20 @@ function App() {
 					<option value="家事">家事</option>
 					<option value="勉強">勉強</option>
 					<option value="その他">その他</option>
+				</select>
+
+				<label htmlFor="priority-filter">優先度で絞り込み:</label>
+				<select
+					id="priority-filter"
+					value={filterPriority}
+					onChange={(e) =>
+						setFilterPriority(e.target.value as Priority | "すべて")
+					}
+				>
+					<option value="すべて">すべて</option>
+					<option value="high">高</option>
+					<option value="medium">中</option>
+					<option value="low">低</option>
 				</select>
 			</div>
 			<TodoList

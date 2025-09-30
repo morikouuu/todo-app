@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Todo, Tag } from "../../types/todo";
+import type { Todo, Tag, Priority } from "../../types/todo";
 import "./style.css";
 
 type addTaskProps = {
@@ -10,6 +10,7 @@ const InputForm = ({ addTask }: addTaskProps) => {
 	const [task, setTask] = useState("");
 	const [deadline, setDeadline] = useState("");
 	const [selectedTag, setSelectedTag] = useState<Tag>("その他");
+	const [selectedPriority, setSelectedPriority] = useState<Priority>("medium");
 	const handlesubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 
@@ -23,6 +24,8 @@ const InputForm = ({ addTask }: addTaskProps) => {
 			done: false,
 			deadline,
 			tag: selectedTag,
+			priority: selectedPriority,
+			createdat: new Date(),
 		};
 
 		addTask(newTask);
@@ -30,6 +33,7 @@ const InputForm = ({ addTask }: addTaskProps) => {
 		setTask("");
 		setDeadline("");
 		setSelectedTag("その他");
+		setSelectedPriority("medium");
 	};
 	return (
 		<form onSubmit={handlesubmit}>
@@ -56,6 +60,14 @@ const InputForm = ({ addTask }: addTaskProps) => {
 				<option value="家事">家事</option>
 				<option value="勉強">勉強</option>
 				<option value="その他">その他</option>
+			</select>
+			<select
+				value={selectedPriority}
+				onChange={(e) => setSelectedPriority(e.target.value as Priority)}
+			>
+				<option value="high">高</option>
+				<option value="medium">中</option>
+				<option value="low">低</option>
 			</select>
 			<button type="submit" disabled={!task.trim()}>
 				追加する

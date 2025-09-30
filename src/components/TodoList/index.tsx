@@ -1,4 +1,5 @@
 import type { Todo } from "../../types/todo";
+import { PRIORITY_LABELS } from "../../types/todo";
 import "./style.css";
 
 type TodoListProps = {
@@ -25,6 +26,9 @@ const TodoList = ({ tasks, onDelete, onCheck }: TodoListProps) => {
 							/>
 
 							<span className="tag">{task.tag}</span>
+							<span className={`priority priority-${task.priority}`}>
+								優先度: {PRIORITY_LABELS[task.priority]}
+							</span>
 							{task.deadline && (
 								<span
 									className={`deadline ${
