@@ -27,7 +27,7 @@ const TodoList = ({ tasks, onDelete, onCheck }: TodoListProps) => {
 
 							<span className="tag">{task.tag}</span>
 							<span className={`priority priority-${task.priority}`}>
-								優先度: {PRIORITY_LABELS[task.priority]}
+								優先度で絞り込み: {PRIORITY_LABELS[task.priority]}
 							</span>
 							{task.deadline && (
 								<span

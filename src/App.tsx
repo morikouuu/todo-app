@@ -43,7 +43,6 @@ function App() {
 	return (
 		<div className="app">
 			<h1>Todoリスト</h1>
-			<p>テスト表示</p>
 			<InputForm addTask={addTask} />
 			<div className="filter-section">
 				<label htmlFor="tag-filter">タグで絞り込み:</label>
