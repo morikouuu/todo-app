@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import "./App.css";
 import InputForm from "./components/InputForm";
@@ -11,6 +11,20 @@ function App() {
 	const [filterPriority, setFilterPriority] = useState<Priority | "すべて">(
 		"すべて"
 	);
+
+	// 初回読み込み時にlocalStorageから復元
+	useEffect(() => {
+		const savedTasks = localStorage.getItem("todos");
+		if (savedTasks) {
+			setTasks(JSON.parse(savedTasks));
+		}
+	}, []);
+
+	// タスクが変更された時にローカルストレージに保存
+	useEffect(() => {
+		localStorage.setItem("todos", JSON.stringify(tasks));
+	}, [tasks]);
+
 	const addTask = (newTask: Todo) => {
 		setTasks([...tasks, newTask]);
 	};

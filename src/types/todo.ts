@@ -17,7 +17,6 @@ export type Todo = {
 	deadline: string;
 	tag: Tag;
 	priority: Priority;
-	createdat: Date;
 };
 
 export const PRIORITY_LABELS = {

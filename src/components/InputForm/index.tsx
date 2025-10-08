@@ -25,7 +25,6 @@ const InputForm = ({ addTask }: addTaskProps) => {
 			deadline,
 			tag: selectedTag,
 			priority: selectedPriority,
-			createdat: new Date(),
 		};
 
 		addTask(newTask);
