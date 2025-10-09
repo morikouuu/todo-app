@@ -6,19 +6,22 @@ import TodoList from "./components/TodoList/";
 import type { Todo, Tag, Priority } from "./types/todo";
 
 function App() {
-	const [tasks, setTasks] = useState<Todo[]>([]);
+	const [tasks, setTasks] = useState<Todo[]>(() => {
+		const savedTasks = localStorage.getItem("todos");
+		if (savedTasks) {
+			try {
+				return JSON.parse(savedTasks);
+			} catch (error) {
+				console.error("データの読み込みに失敗しました:", error);
+				return [];
+			}
+		}
+		return [];
+	});
 	const [filterTag, setFilterTag] = useState<Tag | "すべて">("すべて");
 	const [filterPriority, setFilterPriority] = useState<Priority | "すべて">(
 		"すべて"
 	);
-
-	// 初回読み込み時にlocalStorageから復元
-	useEffect(() => {
-		const savedTasks = localStorage.getItem("todos");
-		if (savedTasks) {
-			setTasks(JSON.parse(savedTasks));
-		}
-	}, []);
 
 	// タスクが変更された時にローカルストレージに保存
 	useEffect(() => {
