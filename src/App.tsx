@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import "./App.css";
 import InputForm from "./components/InputForm";
@@ -10,9 +10,26 @@ function App() {
 		const savedTasks = localStorage.getItem("todos");
 		if (savedTasks) {
 			try {
-				return JSON.parse(savedTasks);
+				const parsed = JSON.parse(savedTasks);
+				// 配列であることを確認し、各要素がTodo型であることを検証
+				if (Array.isArray(parsed)) {
+					return parsed.filter((task) => {
+						return (
+							task &&
+							typeof task.id === "number" &&
+							typeof task.task === "string" &&
+							typeof task.done === "boolean" &&
+							typeof task.deadline === "string" &&
+							typeof task.tag === "string" &&
+							typeof task.priority === "string"
+						);
+					});
+				}
+				return [];
 			} catch (error) {
 				console.error("データの読み込みに失敗しました:", error);
+				// 不正なデータをクリア
+				localStorage.removeItem("todos");
 				return [];
 			}
 		}
@@ -22,10 +39,19 @@ function App() {
 	const [filterPriority, setFilterPriority] = useState<Priority | "すべて">(
 		"すべて"
 	);
+	const isInitialMount = useRef(true);
 
 	// タスクが変更された時にローカルストレージに保存
 	useEffect(() => {
-		localStorage.setItem("todos", JSON.stringify(tasks));
+		if (isInitialMount.current) {
+			isInitialMount.current = false;
+			return;
+		}
+		try {
+			localStorage.setItem("todos", JSON.stringify(tasks));
+		} catch (error) {
+			console.error("データの保存に失敗しました:", error);
+		}
 	}, [tasks]);
 
 	const addTask = (newTask: Todo) => {
